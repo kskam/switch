@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.praxis.switchapp"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+    
+   <application
+        android:allowBackup="true"
+        android:name="App"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        
+        <activity
+            android:name="com.praxis.switchapp.Main"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+        	android:name="com.praxis.switchapp.Nfc"
+        	android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <data android:mimeType="application/com.praxis.switchapp" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <service
+            android:name="com.praxis.switchapp.rfduino.BluetoothService"
+            android:icon="@drawable/ic_service"
+            android:label="@string/service_name"
+            android:enabled="true">
+        </service>
+        
+        <receiver
+            android:name="com.praxis.switchapp.rfduino.BluetoothWifiReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/start_service_name">
+            <intent-filter>
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+                </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
