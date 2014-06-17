@@ -26,7 +26,7 @@ public final class R {
         public static final int splash_screen_bg=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f080008;
+        public static final int action_settings=0x7f080007;
         public static final int connectButton=0x7f080006;
         public static final int manual1=0x7f080005;
         public static final int manual1_label=0x7f080004;
@@ -34,7 +34,6 @@ public final class R {
         public static final int pager_title_strip=0x7f080001;
         public static final int switch1=0x7f080003;
         public static final int switch1_label=0x7f080002;
-        public static final int writeNFCButton=0x7f080007;
     }
     public static final class layout {
         public static final int activity_switch=0x7f030000;
@@ -51,9 +50,10 @@ public final class R {
         public static final int connecting=0x7f05000a;
         public static final int disconnect=0x7f050006;
         public static final int manual1_label=0x7f050009;
-        public static final int service_name=0x7f05000b;
-        public static final int start_service_name=0x7f05000c;
-        public static final int startup_intent_name=0x7f05000d;
+        public static final int service_nfc=0x7f05000c;
+        public static final int service_wifi=0x7f05000b;
+        public static final int start_service_wifi=0x7f05000d;
+        public static final int startup_intent_name=0x7f05000e;
         public static final int switch1_label=0x7f050008;
         public static final int title_section1=0x7f050002;
         public static final int title_section2=0x7f050003;

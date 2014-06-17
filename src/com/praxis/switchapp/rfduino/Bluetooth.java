@@ -2,8 +2,6 @@ package com.praxis.switchapp.rfduino;
 
 import java.util.UUID;
 
-import com.praxis.switchapp.Main;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -17,6 +15,11 @@ import android.app.Activity;
 import android.util.Log;
 
 public class Bluetooth {
+	/**
+	 * Bluetooth class to manage the connection
+	 */
+	
+	
 	/**
 	 * The Bluetooth adapter.
 	 */
@@ -112,7 +115,7 @@ public class Bluetooth {
 		@Override
 		public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
 			Log.d(TAG, "Found BTLE device: " + device.getName());
-			if (device.getName().equalsIgnoreCase("rfduino")) {
+			if (device.getName().equalsIgnoreCase("rfduino1")) {
 				stopScan();
 				
 				Log.d(TAG, "Found RFDuino 'RFduino' trying to connect to " + device.getAddress());
@@ -124,6 +127,8 @@ public class Bluetooth {
 									    bluetoothGatt.discoverServices());
 						} else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
 							connected = false;
+							state = false;
+							stop();
 							Log.d(TAG, "Disconnected from RFduino");
 						}
 					}
@@ -135,18 +140,8 @@ public class Bluetooth {
 							BluetoothGattService serv = bluetoothGatt.getService(UUID.fromString(serviceUUID));
 							sendCharacteristic = serv.getCharacteristic(UUID.fromString(sendCharacteristicUUID));
 							connected = true;
+							Log.d(TAG, "Services connected");
 							setSwitch(true);
-							parentActivity.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										Main switchActivity = (Main) parentActivity;
-										switchActivity.setConnectButton(true, true);
-									} catch (ClassCastException e) {
-										Log.d(TAG, e.toString());
-									}
-								}
-							});
 						}
 					}
 				});
@@ -162,6 +157,10 @@ public class Bluetooth {
 		return connected;
 	}
 	
+	/**
+	 * Getter method if adapter is enabled
+	 * @return
+	 */
 	public boolean isEnabled() {
 		return bluetoothAdapter.isEnabled();
 	}

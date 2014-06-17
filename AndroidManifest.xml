@@ -44,9 +44,16 @@
         </activity>
         
         <service
-            android:name="com.praxis.switchapp.rfduino.BluetoothService"
+            android:name="com.praxis.switchapp.rfduino.BluetoothWifiService"
             android:icon="@drawable/ic_service"
-            android:label="@string/service_name"
+            android:label="@string/service_wifi"
+            android:enabled="true">
+        </service>
+
+        <service
+            android:name="com.praxis.switchapp.rfduino.BluetoothNfcService"
+            android:icon="@drawable/ic_service"
+            android:label="@string/service_nfc"
             android:enabled="true">
         </service>
         
@@ -54,7 +61,7 @@
             android:name="com.praxis.switchapp.rfduino.BluetoothWifiReceiver"
             android:enabled="true"
             android:exported="true"
-            android:label="@string/start_service_name">
+            android:label="@string/start_service_wifi">
             <intent-filter>
                 <action android:name="android.net.wifi.STATE_CHANGE" />
                 </intent-filter>

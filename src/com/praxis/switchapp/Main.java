@@ -99,13 +99,14 @@ public class Main extends FragmentActivity {
 		bluetooth = switchApp.getBluetooth();
 		bluetooth.setParentActivity(this);
 		setSwitchState();
+		setConnectButton();
 		
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		
 		// NFC
-		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		nfcAdapter = NfcAdapter.getDefaultAdapter(switchApp);
 		Intent nfcIntent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		nfcIntent.putExtra("connected", bluetooth.isConnected());
 		nfcPendingIntent = PendingIntent.getActivity(this, 0, nfcIntent, 0);
@@ -117,7 +118,6 @@ public class Main extends FragmentActivity {
 	public void setSwitchState() {
 		// Sets the state of the switch based on bluetooth connection
 		// and light
-		boolean connected = bluetooth.isConnected();
 		Switch sw = (Switch) findViewById(R.id.switch1);
 		if (sw != null) {
 			if (bluetooth.isConnected()) {
@@ -126,45 +126,36 @@ public class Main extends FragmentActivity {
 				sw.setChecked(false);
 			}
 		}
-		setConnectButton(connected, true);
 	}
 	
-	public void setConnectButton(boolean connected, boolean enabled) {
+	public void setConnectButton() {
+		// Sets the connection button based on the bluetooth connection
 		Button connectButton = (Button) findViewById(R.id.connectButton);
+		Log.d(TAG, "Setting Connect Button");
 		
 		if (connectButton == null) {
 			Log.d(TAG, "Connect Button is null");
 			return;
 		}
-		Log.d(TAG, "Setting Connect Button to: " + String.valueOf(connected) + " " + String.valueOf(enabled));
-		connectButton.setEnabled(enabled);
-		if (connected) {
+		if (bluetooth.isConnected()) {
 			connectButton.setText(R.string.disconnect);
 		} else {
 			connectButton.setText(R.string.connect);
 		}
-		connectButton.invalidate();
 	}
 	
 	public void toggleConnection(View v) {
+		// Stop or start the bluetooth connection
 		if (bluetooth.isConnected()) {
 			bluetooth.stop();
-			setConnectButton(false, true);
 		} else {
 			bluetooth.startConnection();
-			setConnectButton(false, false);
 			handler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
 					if (!bluetooth.isConnected()) {
 						Log.d(TAG, "Scanning timeout, stopping");
 						bluetooth.stopScan();
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								setConnectButton(false, true);
-							}
-						});
 					}
 				}
 			}, SCAN_PERIOD);
@@ -176,6 +167,7 @@ public class Main extends FragmentActivity {
 	}
 	
 	public void onSwitchClicked(View v) {
+		// Sets the switch based on user input
 		boolean on = ((Switch) v).isChecked();
 		
 		Switch manual = (Switch) findViewById(R.id.manual1);
@@ -186,6 +178,7 @@ public class Main extends FragmentActivity {
 	}
 	
 	public void onManualClicked(View v) {
+		// Sets the switch to use a manual override
 		boolean manualOn = ((Switch) v).isChecked();
 		
 		Switch sw = (Switch) findViewById(R.id.switch1);
@@ -206,12 +199,15 @@ public class Main extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		// resume NFC writing capabilities
 		if (nfcAdapter != null) {
 			if (nfcAdapter.isEnabled()) {
 				Log.d(TAG, "Enabled NFC foreground dispatch");
 				nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, nfcFilters, null);
 			}
 		}
+		setSwitchState();
+		setConnectButton();
 	}
 
 	@Override
@@ -219,6 +215,9 @@ public class Main extends FragmentActivity {
 		super.onPause();
 		if (nfcAdapter != null) {
 			nfcAdapter.disableForegroundDispatch(this);
+		}
+		if (bluetooth != null) {
+			bluetooth.stop();
 		}
 	}
 	
@@ -300,9 +299,6 @@ public class Main extends FragmentActivity {
 			super.onActivityCreated(savedInstanceState);
 			Main switchActivity = (Main) getActivity();
 			Log.d(TAG, "bluetooth connected? " + String.valueOf(switchActivity.isConnected()));
-			if (switchActivity.isConnected()) {
-				switchActivity.setConnectButton(true, true);
-			}
 		}
 	}
 

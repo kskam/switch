@@ -12,8 +12,9 @@
     <string name="switch1_label">Light 1</string>
     <string name="manual1_label">Manual Mode</string>
     <string name="connecting">Connecting to Bluetooth..</string>
-	<string name="service_name">RFDuinoBLEService</string>
-	<string name="start_service_name">StartRFDuinoBLEServiceBootReceiver</string>
+	<string name="service_wifi">RFDuinoBluetoothWifiService</string>
+    <string name="service_nfc">RFDuinoBluetoothNfcService</string>
+	<string name="start_service_wifi">StartRFDuinoBLEServiceBootReceiver</string>
 	<string name="startup_intent_name">StartupIntentReceiver</string>
 		
 </resources>

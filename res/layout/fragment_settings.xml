@@ -18,15 +18,4 @@
         android:text="@string/connect" 
         android:onClick="toggleConnection" />
 
-    <Button
-        android:id="@+id/writeNFCButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/connectButton"
-        android:layout_alignRight="@+id/connectButton"
-        android:layout_below="@+id/connectButton"
-        android:layout_marginTop="14dp"
-        android:text="@string/writeNFC" 
-        android:onClick="writeNFC" />
-    
 </RelativeLayout>

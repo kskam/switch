@@ -8,12 +8,14 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-public class BluetoothService extends Service {
+public abstract class BluetoothService extends Service {
 	private Handler handler;
-	private Bluetooth bluetooth;
+	protected Bluetooth bluetooth;
 	private boolean stopped = false;
-	private static String TAG = "BLEService";
+	private static String TAG = "BluetoothService";
 	private static final long SCAN_PERIOD = 20000;
+	
+	public abstract void doSwitch(boolean sw);
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -22,10 +24,12 @@ public class BluetoothService extends Service {
 		
 		bluetooth = ((App) getApplication()).getBluetooth();
 		if (bluetooth != null && bluetooth.isEnabled()) {
-			boolean sw = intent.getBooleanExtra("switch", false);
+			boolean sw = bluetooth.getSwitch();
 			if (bluetooth.isConnected()) {
-				bluetooth.setSwitch(!sw);
+				Log.d(TAG, "Bluetooth already connected");
+				doSwitch(!sw);
 			} else {
+				Log.d(TAG, "Starting connection");
 				bluetooth.startConnection();
 				handler.postDelayed(new Runnable() {
 					@Override

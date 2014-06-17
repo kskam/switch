@@ -17,7 +17,7 @@ package com.praxis.switchapp;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import com.praxis.switchapp.rfduino.BluetoothService;
+import com.praxis.switchapp.rfduino.BluetoothNfcService;
 
 import android.app.Activity;
 import android.content.Context;
@@ -51,17 +51,10 @@ public class Nfc extends Activity {
 			NdefRecord connectRecord = ((NdefMessage)rawMsgs[0]).getRecords()[0];
 			String nfcData = new String(connectRecord.getPayload());
 			
-			Toast.makeText(this,  nfcData,  Toast.LENGTH_SHORT).show();
+			Toast.makeText(this,  "Toggling Switch",  Toast.LENGTH_SHORT).show();
 			Log.d(TAG, "NFC Data: " + nfcData);
 
-			Intent serviceIntent = new Intent(this, BluetoothService.class);
-			boolean sw = Boolean.valueOf(nfcData);
-			serviceIntent.putExtra("switch", sw);
-			
-			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-			String data = String.valueOf(!sw);
-			writeTag(this, tag, data);
-			
+			Intent serviceIntent = new Intent(this, BluetoothNfcService.class);
 			this.startService(serviceIntent);
 			
 			finish();

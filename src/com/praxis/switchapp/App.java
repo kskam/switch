@@ -5,6 +5,9 @@ import com.praxis.switchapp.rfduino.Bluetooth;
 import android.app.Application;
 
 public class App extends Application {
+	/**
+	 * Bluetooth singleton object
+	 */
 	public Bluetooth bluetooth = null;
 	
 	@Override
@@ -21,4 +24,5 @@ public class App extends Application {
 	public Bluetooth getBluetooth() {
 		return bluetooth;
 	}
+	
 }

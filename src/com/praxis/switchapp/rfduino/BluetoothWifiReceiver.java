@@ -21,7 +21,7 @@ public class BluetoothWifiReceiver extends BroadcastReceiver {
 		WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
 		if (netInfo != null && netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
 			if (wifiInfo.getSSID().contains(WIFI_SSID)) {
-				Intent serviceIntent = new Intent(context, BluetoothService.class);
+				Intent serviceIntent = new Intent(context, BluetoothWifiService.class);
 				context.startService(serviceIntent);
 			}
 		} else {
